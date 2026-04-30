@@ -25,3 +25,15 @@ logging:
   level:
     com.fast: debug
     org.springframework: warn
+
+# Mybatis 配置
+# 操作数据库的框架, 能简化数据库操作
+mybatis:
+  # 告诉mybatis 去哪里找数据库接口对应的实体类（别名包扫描）
+  type-aliases-package: com.fast.**.domain
+  # 配置 mapper 的扫描，告诉mybatis 去哪里找SQL映射文件（XML文件）
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  # 配置 mybatis 的日志
+  configuration:
+    # 能看到 mybatis 执行的 SQL 语句
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
