@@ -22,3 +22,5 @@
 10:53:28.830 [main] INFO  o.a.c.h.Http11NioProtocol - [log,168] - Starting ProtocolHandler ["http-nio-8080"]
 10:53:28.848 [main] INFO  c.f.s.FastApplication - [logStarted,59] - Started FastApplication in 0.697 seconds (process running for 5.983)
 10:53:34.270 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[.[.[/] - [log,168] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+11:16:35.811 [SpringApplicationShutdownHook] INFO  c.a.d.p.DruidDataSource - [close,2204] - {dataSource-1} closing ...
+11:16:35.813 [SpringApplicationShutdownHook] INFO  c.a.d.p.DruidDataSource - [close,2277] - {dataSource-1} closed
