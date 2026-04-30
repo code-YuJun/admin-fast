@@ -13,6 +13,22 @@ spring:
     username: root
     password: 2594131385
 
+  # 配置security的默认用户账号密码
+  # 这个配置的目的是为了不在控制台中输出密码字段
+  # 默认情况下，当你添加了spring-boot-starter-security的依赖之后
+  # 1.springboot会自动创建一个默认用户 用户名为user
+  # 2.密码：每次启动后端的时候都会在控制台中随机生成
+  # 3. 所有接口都需要HTTP BASIC认证
+  #
+  # 问题：这会导致以下情况
+  # - 访问任何接口都会弹出浏览器的登录框
+  # - 每次重启应用密码都会变化
+  # - 不符合我们想要的使用JWT令牌认证的需求
+  security:
+    user:
+      name: 123
+      password: 123
+
 # 环境配置
 server:
   port: 8080
@@ -37,3 +53,12 @@ mybatis:
   configuration:
     # 能看到 mybatis 执行的 SQL 语句
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+token:
+  # 请求头字段名，前端需要在请求头中携带这个字段传递 token
+  header: Authorization
+  # 密钥，用于加密/解密token的字符串
+  secret: asdfghjklqwertyuioasdghjjklzxcbnmdsahjkqewuioewquiuiuisaosoiisuahdjccccc
+  # token 过期时间,过期之后需要重新登录，单位：秒
+  expiration: 300
+
