@@ -16,8 +16,6 @@ import java.util.Collections;
  * 这个类主要负责两件事情
  * 1. 配置静态资源访问路径(比如用户上传的图片、文件等等)
  * 2. 配置跨域访问规则(允许前端应用访问后端API)
- *
- * 可以把这个类看做是系统的"接待处"和"通行证办理处"
  */
 @Configuration //告诉spring: 这是一个配置类, 启动时要加载
 public class ResourcesConfig implements WebMvcConfigurer {
@@ -62,7 +60,6 @@ public class ResourcesConfig implements WebMvcConfigurer {
         //创建基于URL的跨域配置源
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         //注册配置: 对所有路径(/**)应用上面的跨域规则
-        //就像是: 整个园区的所有大门都使用同一套通行规则
         source.registerCorsConfiguration("/**", config);
         return source;
     }
