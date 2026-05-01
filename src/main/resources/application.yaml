@@ -60,5 +60,5 @@ token:
   # 密钥，用于加密/解密token的字符串
   secret: asdfghjklqwertyuioasdghjjklzxcbnmdsahjkqewuioewquiuiuisaosoiisuahdjccccc
   # token 过期时间,过期之后需要重新登录，单位：秒
-  expiration: 300
+  expireTime: 300
 
