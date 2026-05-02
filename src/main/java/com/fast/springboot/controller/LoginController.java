@@ -6,7 +6,9 @@ import com.fast.springboot.domain.LoginBody;
 import com.fast.springboot.domain.LoginUser;
 import com.fast.springboot.domain.User;
 import com.fast.springboot.service.UserService;
+import com.fast.springboot.utils.SecurityUtils;
 import jakarta.annotation.Resource;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,5 +54,16 @@ public class LoginController extends BaseController {
         // 步骤6: 返回成功响应，包含 token
         return success().put("token", token);
     }
-
+    /**
+     * 获取当前用户信息
+     */
+    @GetMapping("/getInfo")
+    public AjaxResult getInfo() {
+        // 步骤1：获取当前登录用户的用户ID
+        Long userId = SecurityUtils.getUserId();
+        // 步骤2：根据用户ID查询用户信息
+        User user = userService.selectUserByUserId(userId);
+        // 步骤3：返回用户信息
+        return success(user);
+    }
 }

@@ -38,4 +38,11 @@
         where user_name = #{userName}
     </select>
 
+
+    <select id="selectUserByUserId" parameterType="Long" resultMap="UserResult">
+        select user_id, user_name, sex, avatar, password, create_time
+        from user
+        where user_id = #{userId}
+    </select>
+
 </mapper>

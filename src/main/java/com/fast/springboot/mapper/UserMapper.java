@@ -14,6 +14,14 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UserMapper {
     /**
      * 根据用户名查询用户
+     * @param userName 用户名
+     * @return 用户对象信息
      */
     User selectUserByUserName(String userName);
+    /**
+     * 根据用户ID查询用户
+     * @param userId 用户ID
+     * @return 用户对象信息
+     */
+    User selectUserByUserId(Long userId);
 }
