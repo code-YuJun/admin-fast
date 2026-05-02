@@ -11,5 +11,7 @@ public class FastApplication {
     public static void main(String[] args) {
         // 启动 spring boot 应用
         SpringApplication.run(FastApplication.class, args);
+        // 打印日志
+        System.out.println("==============后端启动成功==============");
     }
 }

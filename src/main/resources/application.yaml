@@ -40,7 +40,7 @@ server:
 logging:
   level:
     com.fast: debug
-    org.springframework: warn
+    org.springframework: info
 
 # Mybatis 配置
 # 操作数据库的框架, 能简化数据库操作
