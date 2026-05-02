@@ -2,12 +2,16 @@ package com.fast.springboot.configure;
 
 import com.fast.springboot.domain.LoginUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -21,6 +25,7 @@ import java.util.concurrent.TimeUnit;
  * 相当于系统的"身份证制作和检查站"
  */
 @Component
+@Slf4j // 日志注解
 public class TokenService {
     // 读取的是application.properties文件中的配置项
     //令牌自定义标识: HTTP请求头中的携带的token字段名
@@ -81,5 +86,62 @@ public class TokenService {
                 .signWith(secretKey) //用密钥签名
                 .compact(); //生成字符串
     }
-
+    /**
+     * 获取用户身份信息
+     * 功能: 从HTTP请求中提取token, 再从 token 中解析出用户信息
+     * 使用场景: 拦截器中调用, 验证用户是否登录
+     */
+    public LoginUser getLoginUser(HttpServletRequest request) {
+        //1. 从请求头中获取token字符串
+        String token = getToken(request);
+        //2. 判断token是否为空或者空白
+        if (!StringUtils.hasText(token)) {
+            return null; // 没有token, 说明用户未登录
+        }
+        try {
+            //3. 解析token, 获取声明数据
+            Claims claims = parseToken(token);
+            //4. 从声明数据中获取存储的用户JSON字符串
+            String userJson = claims.get("user_key", String.class);
+            //5. 将JSON字符串反序列化为LoginUser对象
+            return objectMapper.readValue(userJson, LoginUser.class);
+        } catch (Exception e) {
+            //6. 捕获所有异常
+            log.info("解析用户信息异常=>{}", String.valueOf(e));
+        }
+        return null; // 解析失败返回 null
+    }
+    /**
+     * 从HTTP请求中提取token
+     */
+    public String getToken(HttpServletRequest request) {
+        String token = request.getHeader(header);
+        if (StringUtils.hasText(token) && token.startsWith("Bearer ")) {
+            return token.substring(7);
+        }
+        return token;
+    }
+    /**
+     * 解析字符串, 获取声明数据
+     */
+    public Claims parseToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey) // 设置验证密钥
+                .build()
+                .parseClaimsJws(token) // 解析token
+                .getBody(); // 获取到数据部分
+    }
+    /**
+     * 验证令牌有效期
+     */
+    public void verifyToken(LoginUser loginUser) {
+        //获取过期时间
+        Long expireTime = loginUser.getExpireTime();
+        //获取当前时间
+        long currentTime = System.currentTimeMillis();
+        //判断是否已经过期(剩余时间<=0)
+        if (expireTime - currentTime <= 0) {
+            throw new RuntimeException("Token已过期");
+        }
+    }
 }
